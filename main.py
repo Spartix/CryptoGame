@@ -31,8 +31,8 @@ def register_page():
 def connexion():
     username = request.form['username']
     password = request.form['password']
-
-
+    cursor.execute(f"SELECT * from Users WHERE email = {username} AND pass = {password}")
+    response = cursor.fetchall()
 
     return f'Username: {username}, Password: {password}'
 
