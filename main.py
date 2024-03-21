@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import sqlite3
+from .src.users import user
 conn = sqlite3.connect('DB_CryptoGame.db')
 cursor = conn.cursor()
 
@@ -7,13 +8,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    print(request.headers.get('x-Access-Token'))
     return render_template('index.html')
 
 @app.route("/login")
 def login_page():
     return render_template("login.html")
 
-@app.route("/register")
+@app.route("/aysnc-register")
 def register_page():
     name = request.form['nom']
     prenom = resquest.form['prenom']
@@ -22,19 +24,16 @@ def register_page():
     confirm_mdp = request.form[confirm password]
     return render_template("register.html")
 
-@app.route("/async-register")
+@app.route("/register")
 def register_page():
-    
     return render_template("register.html")
 
 @app.route("/async-login",methods=['POST'])
 def connexion():
-    username = request.form['username']
-    password = request.form['password']
-    cursor.execute(f"SELECT * from Users WHERE email = {username} AND pass = {password}")
-    response = cursor.fetchall()
 
-    return f'Username: {username}, Password: {password}'
+    if user.IsValid(request.form["username"],request.form["password"]):
+        token = user.GetToken(request.form["username"],request.form["password"])
+        return redirect("/putit",token=token)
 
 # @app.route("/exemple")
 # def exemple():
