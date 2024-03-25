@@ -42,6 +42,9 @@
       .container form input[type="submit"]:hover {
         background-color: #0056b3;
       }
+      .invalid-password {
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -57,10 +60,13 @@
           required
         />
         <input type="checkbox" onclick="showPassword()" /> Voir le mot de passe
+        <p class="invalid-password" id="invalidPasswordText" hidden>
+          Mot de passe invalide
+        </p>
         <input type="submit" value="Login" />
       </form>
     </div>
-    
+
     <script>
       function showPassword() {
         var passwordField = document.getElementById("password");
@@ -70,6 +76,12 @@
           passwordField.type = "password";
         }
       }
+      function isValid(bool) {
+        if (window.location.href.includes("?error=true")) {
+          document.getElementById("invalidPasswordText").hidden = false;
+        }
+      }
+      isValid();
     </script>
   </body>
 </html>
