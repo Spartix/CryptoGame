@@ -20,21 +20,35 @@ def close_connection(exception):
 
 @app.route('/')
 def index():
-    print(request.headers.get('x-Access-Token'))
-    return render_template('index.html')
+    if not (user.IsLogin(request.cookies.get('access_token'),get_db().cursor())):
+        return render_template("./login.html")
+    else:
+        return render_template('index.html')
 
 @app.route("/login")
 def login_page():
+    if user.IsLogin(request.cookies.get('access_token'),get_db().cursor()):
+        return render_template("./index.html")
     return render_template("login.html")
 
-# @app.route("/aysnc-register")
-# def register_page():
-#     name = request.form['nom']
-#     prenom = resquest.form['prenom']
-#     email = request.form['email']
-#     mdp = request.form['password']
-#     confirm_mdp = request.form[confirm password]
-#     return render_template("register.html")
+@app.route("/aysnc-register")
+def register_page():
+    name = request.form['nom']
+    prenom = request.form['prenom']
+    email = request.form['email']
+    age = request.form["age"]
+    mdp = request.form['password']
+    confirm_mdp = request.form["confirm password"]
+    if confirm_mdp != mdp:
+        return render_template("register.html")
+    try:
+        user.inscrire(name,prenom,age,email,mdp,get_db())
+        token = user.GetToken(email,mdp,cursor)
+        response = make_response(render_template('index.html'))
+        response.set_cookie('access_token', token)
+        return response
+    except:
+        return render_template("register.html?error=true&message=erreur_d_inscription")
 
 @app.route("/register")
 def register_page():
