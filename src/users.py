@@ -5,7 +5,7 @@ SECRET_KEY = '"PasTresSecretLaCleSecrete"'
 class user:
 
     def IsValid(mail,mdp,cursor) -> bool:
-        print("je me connecte")
+        # print("je me connecte")
         assert type(mail) == str, "l'e-mail est invalide"
         assert '@' and '.' in mail,"l'e-mail est invalide"    
         assert type(mdp) == str, "le mot de passe est invalide"
@@ -36,17 +36,21 @@ class user:
         cursor = conn.cursor()
         cursor.execute(f"select * FROM users where email = '{mail}'")
         response = cursor.fetchall()
-        print(response) # La reponse contient donc tous les utilisateurs
+        #print(response) # La reponse contient donc tous les utilisateurs
         if response == []:
             pass
         else:
             return 'le compte existe déjà'     
-        print("je m'inscris")
+        # print("je m'inscris")
         assert age >= 18,"vous n'avez pas l'age requis"
-        print(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
+        # print(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
         cursor.execute(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
         conn.commit()
-        
+    
+    def GetId(type,value,cursor):
+        cursor.execute(f"select * FROM users where {type} = '{value}'")
+        response = cursor.fetchall()
+        return response
 
     # Secret key for encoding and decoding JWT tokens
     
@@ -64,3 +68,18 @@ class user:
     def decode_token(token) -> str:
         payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         return payload
+    
+    def addmoney(userID,money:int,actif:str,conn):
+        cursor = conn.cursor()
+        cursor.execute(f"select * FROM users where email = '{mail}'")
+        response = cursor.fetchall()
+        #print(response) # La reponse contient donc tous les utilisateurs
+        if response == []:
+            pass
+        else:
+            return 'le compte existe déjà'     
+        print("je m'inscris")
+        assert age >= 18,"vous n'avez pas l'age requis"
+        print(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
+        cursor.execute(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
+        conn.commit()
