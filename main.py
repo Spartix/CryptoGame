@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, request,g,url_for,make_respo
 import sqlite3
 from src.users import user
 conn = sqlite3.connect('DB_CryptoGame.db')
-cursor = conn.cursor()
+
 
 app = Flask(__name__)
 
@@ -31,24 +31,28 @@ def login_page():
         return render_template("./index.html")
     return render_template("login.html")
 
-@app.route("/aysnc-register")
-def register_page():
+@app.route("/async-register",methods=["POST"])
+def register():
     name = request.form['nom']
     prenom = request.form['prenom']
     email = request.form['email']
     age = request.form["age"]
     mdp = request.form['password']
     confirm_mdp = request.form["confirm password"]
+    print(name,prenom,email,age,mdp,confirm_mdp)
     if confirm_mdp != mdp:
         return render_template("register.html")
     try:
-        user.inscrire(name,prenom,age,email,mdp,get_db())
-        token = user.GetToken(email,mdp,cursor)
+        token = user.inscrire(name,prenom,int(age),email,mdp,get_db())
+        if("le compte existe déjà" in token):
+            return redirect("/register?error=true&message=Le_Compte_Existe_Deja")
+        token = user.GetToken(email,mdp,get_db().cursor())
+        print(token)
         response = make_response(render_template('index.html'))
         response.set_cookie('access_token', token)
         return response
-    except:
-        return render_template("register.html?error=true&message=erreur_d_inscription")
+    except Exception as e:
+        return redirect("/register?error=true&message=erreur_d_inscription")
 
 @app.route("/register")
 def register_page():
@@ -59,7 +63,7 @@ def connexion():
     with get_db() as conn:
         cursor = conn.cursor()
         if user.IsValid(request.form["username"],request.form["password"],cursor):
-            token = user.GetToken(request.form["username"],request.form["password"],cursor)
+            token = user.GetToken(request.form["username"],request.form["password"],get_db())
             response = make_response(render_template('index.html'))
             response.set_cookie('access_token', token)
             return response

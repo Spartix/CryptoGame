@@ -21,7 +21,8 @@ class user:
         response = cursor.fetchall()
         return response != []
 
-    def GetToken(email,pas,cursor) -> str:
+    def GetToken(email,pas,conn) -> str:
+        cursor = conn.cursor()
         cursor.execute(f"select ID_User FROM users where email = '{email}' and pass = '{pas}'")
         response = cursor.fetchall()
         if(user.IsValid(email,pas,cursor)):
@@ -30,6 +31,7 @@ class user:
             accesstoken = user.encode_token({"username": email,"ID":response[0][0]})
             #need to add the access token to database
             cursor.execute(f"UPDATE users set Token = '{accesstoken}' WHERE email = '{email}'")
+            conn.commit()
         return accesstoken
 
     def inscrire(nom,prenom,age,mail,mdp,conn):
@@ -46,6 +48,7 @@ class user:
         # print(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
         cursor.execute(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
         conn.commit()
+
     
     def GetId(type,value,cursor):
         cursor.execute(f"select * FROM users where {type} = '{value}'")
@@ -69,17 +72,17 @@ class user:
         payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         return payload
     
-    def addmoney(userID,money:int,actif:str,conn):
-        cursor = conn.cursor()
-        cursor.execute(f"select * FROM users where email = '{mail}'")
-        response = cursor.fetchall()
-        #print(response) # La reponse contient donc tous les utilisateurs
-        if response == []:
-            pass
-        else:
-            return 'le compte existe déjà'     
-        print("je m'inscris")
-        assert age >= 18,"vous n'avez pas l'age requis"
-        print(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
-        cursor.execute(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
-        conn.commit()
+    # def addmoney(userID,money:int,actif:str,conn):
+    #     cursor = conn.cursor()
+    #     cursor.execute(f"select * FROM users where email = '{mail}'")
+    #     response = cursor.fetchall()
+    #     #print(response) # La reponse contient donc tous les utilisateurs
+    #     if response == []:
+    #         pass
+    #     else:
+    #         return 'le compte existe déjà'     
+    #     print("je m'inscris")
+    #     assert age >= 18,"vous n'avez pas l'age requis"
+    #     print(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
+    #     cursor.execute(f"INSERT into Users(Nom,Prenom,Age,email,pass) VALUES('{nom}','{prenom}',{int(age)},'{mail}','{mdp}')")
+    #     conn.commit()

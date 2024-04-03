@@ -43,10 +43,14 @@
     .container form input[type="submit"]:hover {
       background-color: #0056b3;
     }
+    #error{
+      color: red;
+    }
   </style>
   <body>
     <div class="container">
       <h2>Register</h2>
+      <input id="error" value="" hidden disabled></input>
       <form action="async-register" method="post">
         <input type="text" name="nom" placeholder="Nom" required />
         <input type="text" name="prenom" placeholder="Prenom" required />
@@ -64,9 +68,17 @@
           placeholder="Confirm Password"
           requiered
         />
-
+        <input type="number" required name="age" placeholder="age" />
+      </p>
         <input type="submit" value="Register" />
       </form>
     </div>
+    <script>
+      if(window.location.href.includes("error=true")){
+        document.getElementById("error").value = window.location.href.split("&message=")[1]
+        document.getElementById("error").hidden = false
+      }
+    </script>
   </body>
+
 </html>
