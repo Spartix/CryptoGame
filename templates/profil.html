@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Votre Profil</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(194, 236, 139, 0.7);
+        color: #333;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        padding-bottom: 5%;
+        background-color: #000000;
+        background-image: url("https://s2.qwant.com/thumbr/0x380/7/9/45110ed9e7c87af46fc65a45f743a474d53ce5ee0516d5a43c0b8d7f164027/fond-piece-or-bitcoin-crypto-monnaie_1017-31505.jpg?u=https%3A%2F%2Fimg.freepik.com%2Fvecteurs-libre%2Ffond-piece-or-bitcoin-crypto-monnaie_1017-31505.jpg&q=0&b=1&p=0&a=0");
+        border-radius: 8px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transition: box-shadow 0.5s;
+      }
+
+      .container:hover {
+        box-shadow: 0px 13px 20px rgb(0, 0, 0);
+      }
+
+      .profile-info {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .profile-info img {
+        max-width: 100px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-info p {
+        margin: 0;
+        padding: 5px 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 15px;
+        background-color: #f8f8f8;
+        color: #333;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      input[type="text"]:hover {
+        border-color: #999;
+        box-shadow: 0 0 10px #999;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #66afe9;
+        box-shadow: 5px 5px 15px rgba(102, 175, 233, 0.5);
+      }
+      #actifSelect {
+        color: 333;
+        border-radius: 15px;
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+        transform: translateX(-40%);
+        align-items: center;
+        border-bottom: 2px solid crimson;
+      }
+
+      nav ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        list-style: none;
+      }
+
+      nav ul li a {
+        font-size: 1.2rem;
+        font-weight: bolder;
+        text-decoration: none;
+        font-family: sans-serif;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      nav ul li a:hover {
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="./">Home</a></li>
+        <!-- <li><a href="./login" hidden>Se connecter</a></li>
+        <li><a href="./register" hidden>S'inscrire</a></li> -->
+        <li><a href="./roue">Roue</a></li>
+        <li><a href="./disconnect">Se Deconnecter</a></li>
+      </ul>
+    </nav>
+    <div class="container">
+      <h1>Votre profil</h1>
+      <div class="profile-info">
+        <img
+          src="https://s2.qwant.com/thumbr/700x0/6/d/2c340c3deff29966b6dc0e90e278e1c77ec88d1c8648e7ad0e11ea9ba36c97/7vpbcus2uzn31.jpg?u=https%3A%2F%2Fpreview.redd.it%2F7vpbcus2uzn31.jpg%3Fwidth%3D4096%26format%3Dpjpg%26auto%3Dwebp%26s%3D72c156804c8cff9dbe3377d28a7307b504ebd2f5&q=0&b=1&p=0&a=0"
+          alt="Profile Picture"
+        />
+        <input disabled id="Pseudo" type="text" placeholder="Pseudo" />
+        <input disabled id="email" type="text" placeholder="Adresse email" />
+        <label for="actifs">Actifs</label>
+        <select name="actifs" id="actifSelect">
+          <option value="">--Selectionnez un actif--</option>
+          <option value="EUR">EUR</option>
+          <option value="BTC">BTC</option>
+          <option value="LTC">LTC</option>
+          <option value="SOL">SOL</option>
+        </select>
+      </br>
+        <input disabled type="text" placeholder="BALANCE" />
+      </div>
+      <!-- <img
+        src=""
+        alt="Money Image"
+      /> -->
+    </div>
+    <script>
+      function Me() {
+        var xhr = new XMLHttpRequest();
+    
+
+        xhr.open("GET", "/@Me", true);
+    
+        xhr.onload = function() {
+
+          if (xhr.status >= 200 && xhr.status < 300) {
+
+            var response = JSON.parse(xhr.responseText);
+    
+
+            document.getElementById("Pseudo").value = response["Username"]
+            document.getElementById("email").value = response["email"]
+            
+          } else {
+
+            console.error("La requête a échoué avec le statut: " + xhr.status);
+          }
+        };
+
+        xhr.onerror = function() {
+          console.error("Une erreur réseau s'est produite");
+        };
+
+        xhr.send();
+      }
+      Me()
+
+      function fetchActifs() {
+        var xhr = new XMLHttpRequest();
+    
+
+        xhr.open("GET", "/Balance", true);
+    
+        xhr.onload = function() {
+
+          if (xhr.status >= 200 && xhr.status < 300) {
+
+            var response = JSON.parse(xhr.responseText);
+    
+
+            var selectElement = document.getElementById("actifSelect");
+            
+            selectElement.addEventListener("change", function() {
+              var balanceElement = document.querySelector("input[placeholder='BALANCE']");
+              
+              var selectedActif = selectElement.value;
+              
+              if (response[selectedActif] !== undefined) {
+                balanceElement.value = response[selectedActif];
+              } else {
+
+                balanceElement.value = "";
+              }
+            });
+          } else {
+
+            console.error("La requête a échoué avec le statut: " + xhr.status);
+          }
+        };
+
+        xhr.onerror = function() {
+          console.error("Une erreur réseau s'est produite");
+        };
+
+        xhr.send();
+      }
+
+      fetchActifs();
+
+      function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+};
+
+console.log(parseJwt(Token = document.cookie.split("access_token=")[1].split("&")[0]))
+    </script>
+    
+  </body>
+</html>
