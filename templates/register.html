@@ -46,6 +46,7 @@
     }
     #error{
       color: red;
+      width: 100%;
     }
   </style>
   <body>
@@ -76,7 +77,7 @@
     </div>
     <script>
       if(window.location.href.includes("error=true")){
-        document.getElementById("error").value = window.location.href.split("&message=")[1]
+        document.getElementById("error").value = decodeURIComponent(window.location.href.split("&message=")[1])
         document.getElementById("error").hidden = false
       }
     </script>

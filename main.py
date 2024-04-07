@@ -1,23 +1,24 @@
-from flask import Flask, redirect, render_template, request,g,url_for,make_response
+import json
+import jwt
 import sqlite3
+from time import *
+from flask import *
 from src.route.main import *
+from src.db import get_db
 from src.users import user
-conn = sqlite3.connect('DB_CryptoGame.db')
+# conn = sqlite3.connect('DB_CryptoGame.db')
 
 
 app = Flask(__name__)
 
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect('DB_CryptoGame.db')
-    return db
+
 
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
 
 @app.route('/disconnect')
 def deco():
@@ -44,28 +45,7 @@ def login_page():
 
 @app.route("/async-register",methods=["POST"])
 def register():
-    name = request.form['nom']
-    prenom = request.form['prenom']
-    email = request.form['email']
-    age = request.form["age"]
-    mdp = request.form['password']
-    username = request.form["username"]
-    confirm_mdp = request.form["confirm password"]
-    print(name,prenom,email,age,mdp,confirm_mdp)
-    if confirm_mdp != mdp:
-        return render_template("register.html")
-    # try:
-    token = user.inscrire(name,prenom,int(age),email,mdp,username,get_db())
-    if(type(token) == str):
-        if("le compte existe déjà" in token):
-            return redirect("/register?error=true&message=Le_Compte_Existe_Deja")
-    token = user.GetToken(email,mdp,get_db())
-    print(token)
-    response = make_response(render_template('profil.html'))
-    response.set_cookie('access_token', token)
-    return response
-    # except Exception as e:
-    return redirect("/register?error=true&message=erreur_d_inscription")
+    return enregistrement()
 
 @app.route("/register")
 def register_page():
@@ -76,16 +56,9 @@ def register_page():
 
 
 @app.route("/async-login",methods=['POST'])
-def connexion():
-    with get_db() as conn:
-        cursor = conn.cursor()
-        if user.IsValid(request.form["username"],request.form["password"],cursor):
-            token = user.GetToken(request.form["username"],request.form["password"],get_db())
-            response = make_response(redirect('profil'))
-            response.set_cookie('access_token', token)
-            return response
-        else:
-            return redirect("/login?error=true")
+def log():
+    return connexion()
+
 @app.route("/Balance")
 def GetBalance():
     if not (user.IsLogin(request.cookies.get('access_token'),get_db().cursor())):
@@ -97,6 +70,8 @@ def GetMe():
     if not (user.IsLogin(request.cookies.get('access_token'),get_db().cursor())):
         return redirect("./login")
     return str(user.Me(get_db(),request.cookies.get('access_token')))
+
+
 # @app.route("/exemple")
 # def exemple():
 #     # Get_Inuput_User = request.form["utilisateur"]

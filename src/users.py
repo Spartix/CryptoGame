@@ -2,6 +2,7 @@ import json
 import sqlite3
 import jwt
 
+
 SECRET_KEY = '"PasTresSecretLaCleSecrete"'
 class user:
 

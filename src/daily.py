@@ -1,8 +1,5 @@
-
 from time import time
 
-
-#SELECT last_lance from RoueDuJ where ID_User = 5
 class daily:
     def CanLaunch(userID:int,cursor) -> bool:
         cursor.execute(f"SELECT last_lance from RoueDuJ where ID_User = {userID}")
