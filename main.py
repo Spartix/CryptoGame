@@ -1,11 +1,9 @@
-import json
-import jwt
-import sqlite3
 from time import *
 from flask import *
 from src.route.main import *
 from src.db import get_db
 from src.users import user
+from src.utility.crypto import get_crypto_data
 # conn = sqlite3.connect('DB_CryptoGame.db')
 
 
@@ -70,6 +68,16 @@ def GetMe():
     if not (user.IsLogin(request.cookies.get('access_token'),get_db().cursor())):
         return redirect("./login")
     return str(user.Me(get_db(),request.cookies.get('access_token')))
+
+
+@app.route('/data')
+def get_data():
+    timestamps, prices_btc, prices_ltc, prices_sol = get_crypto_data()
+    return jsonify(timestamps=timestamps, prices_btc=prices_btc, prices_ltc=prices_ltc, prices_sol=prices_sol)
+
+@app.route('/chart')
+def GetChart():
+    return render_template("chart.html")
 
 
 # @app.route("/exemple")
