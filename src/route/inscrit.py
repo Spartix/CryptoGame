@@ -1,7 +1,7 @@
 from flask import make_response, redirect, render_template, request
 from src.db import get_db
 from src.users import user
-
+import urllib.parse
 
 def enregistrement():
     name = request.form['nom']
@@ -17,8 +17,7 @@ def enregistrement():
 
     token = user.inscrire(name,prenom,int(age),email,mdp,username,get_db())
     if(type(token) == str):
-        if("le compte existe déjà" in token):
-            return redirect("/register?error=true&message=L%27email%20est%20d%C3%A9ja%20utilis%C3%A9")
+        return redirect(f"/register?error=true&message={urllib.parse.quote(token)}")
     token = user.GetToken(email,mdp,get_db())
     print(token)
     response = make_response(render_template('profil.html'))

@@ -8,59 +8,11 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
-    <style>
-      body {
-        background-color: rgba(194, 236, 139, 0.7);
-      }
-      .container {
-        margin-top: 50px;
-      }
-      .card {
-        background-color: #ffffff;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-      }
-      .card-header {
-        background-color: #ffffff;
-        border-bottom: none;
-      }
-      .card-body {
-        padding: 20px;
-      }
-      .chart-container {
-        position: relative;
-        height: 400px;
-        width: 100%;
-      }
-      nav {
-        display: flex;
-        justify-content: center;
-        transform: translateX(-40%);
-        align-items: center;
-        border-bottom: 2px solid crimson;
-      }
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/chart.css') }}"
+    />
 
-      nav ul {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        list-style: none;
-      }
-
-      nav ul li a {
-        font-size: 1.2rem;
-        font-weight: bolder;
-        text-decoration: none;
-        font-family: sans-serif;
-        color: #333;
-        transition: all 0.3s ease;
-      }
-
-      nav ul li a:hover {
-        color: #fff;
-      }
-    </style>
     <nav>
       <ul>
         <li><a href="./">Home</a></li>
@@ -74,7 +26,7 @@
       <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="form-group">
-            <label for="cryptoSelect">Select Cryptocurrency:</label>
+            <label for="cryptoSelect">Selectionnez une crypto:</label>
             <select class="form-control" id="cryptoSelect">
               <option value="bitcoin">Bitcoin (BTC)</option>
               <option value="litecoin">Litecoin (LTC)</option>
@@ -83,7 +35,7 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <h5 class="card-title">Live Crypto Prices</h5>
+              <h5 class="card-title">Prix des crypto</h5>
             </div>
             <div class="card-body">
               <div class="chart-container">
@@ -123,7 +75,7 @@
                 ),
                 datasets: [
                   {
-                    label: `Price of ${cryptoSymbol.toUpperCase()} (USD)`,
+                    label: `Prix du ${cryptoSymbol.toUpperCase()} (USD)`,
                     data: prices,
                     backgroundColor: "rgba(54, 162, 235, 0.2)",
                     borderColor: "rgba(54, 162, 235, 1)",
@@ -164,7 +116,6 @@
           });
       }
 
-      // Écouter les changements de sélection dans le menu déroulant
       document
         .getElementById("cryptoSelect")
         .addEventListener("change", function () {
@@ -172,7 +123,6 @@
           getCryptoData(selectedCrypto);
         });
 
-      // Afficher le graphique de Bitcoin par défaut au chargement de la page
       getCryptoData("bitcoin");
     </script>
   </body>

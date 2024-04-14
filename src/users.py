@@ -2,7 +2,6 @@ import json
 import sqlite3
 import jwt
 
-
 SECRET_KEY = '"PasTresSecretLaCleSecrete"'
 class user:
 
@@ -48,10 +47,16 @@ class user:
 
     def inscrire(nom,prenom,age,mail,mdp,username,conn):
         cursor = conn.cursor()
+        if age < 18:
+            return "Vous n'avez pas l'age requis"
         try:
             cursor.execute("SELECT * FROM users WHERE email = ?", (mail,))
             response = cursor.fetchall()
-            if not response:
+            cursor.execute("SELECT * FROM users WHERE Username = ?", (username,))
+            rez2 = cursor.fetchall()
+            if "@" not in mail:
+                return 'invalid email type'
+            if not response and not rez2:
                 cursor.execute("INSERT INTO Users(Nom, Prenom, Age, email, pass, Username) VALUES (?, ?, ?, ?, ?, ?)",
                             (nom, prenom, int(age), mail, mdp, username))
                 conn.commit()

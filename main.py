@@ -79,6 +79,9 @@ def get_data():
 def GetChart():
     return render_template("chart.html")
 
+@app.route('/roue')
+def GetRoue():
+    return render_template("roue.html")
 
 # @app.route("/exemple")
 # def exemple():
