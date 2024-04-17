@@ -11,21 +11,23 @@
       <h2>Register</h2>
       <input id="error" value="" hidden disabled></input>
       <form action="async-register" method="post">
-        <input type="text" name="nom" placeholder="Nom" required />
-        <input type="text" name="prenom" placeholder="Prenom" required />
-        <input type="text" name="email" placeholder="E-mail" required />
+        <input type="text" name="nom" placeholder="Nom" minlength="3" maxlength="12" required/>
+        <input type="text" name="prenom" placeholder="Prenom" minlength="3" maxlength="12" required />
+        <input type="email" name="email" placeholder="E-mail" required />
         <input type="text" name="username" placeholder="Username" required />
         <input
           type="password"
           name="password"
+          pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}"
           placeholder="Password"
+          maxlength="14"
           required
         />
         <input
           type="password"
           name="confirm password"
           placeholder="Confirm Password"
-          requiered
+          required
         />
         <input type="number" required name="age" placeholder="age" />
       </p>
@@ -33,10 +35,19 @@
       </form>
     </div>
     <script>
-      if(window.location.href.includes("error=true")){
+            if(window.location.href.includes("error=true")){
         document.getElementById("error").value = decodeURIComponent(window.location.href.split("&message=")[1])
         document.getElementById("error").hidden = false
       }
+      var input = document.getElementById('password')
+      input.oninvalid = function(event) {
+        event.target.setCustomValidity(`Le mot de passe doit contenir: 
+                -Au moins une majuscule (A-Z)
+                -Au moins 8 caractère (maximum 14)
+                -des chiffres (0-9) 
+                -des caratères spéciaux (#?!@$%^&*-)`)
+              }
+
     </script>
   </body>
 

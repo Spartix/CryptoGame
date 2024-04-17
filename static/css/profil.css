@@ -1,3 +1,5 @@
+@import url("./nav.css");
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -68,32 +70,4 @@ input[type="text"]:focus {
 #actifSelect {
   color: 333;
   border-radius: 15px;
-}
-nav {
-  display: flex;
-  justify-content: center;
-  transform: translateX(-40%);
-  align-items: center;
-  border-bottom: 2px solid crimson;
-}
-
-nav ul {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  list-style: none;
-}
-
-nav ul li a {
-  font-size: 1.2rem;
-  font-weight: bolder;
-  text-decoration: none;
-  font-family: sans-serif;
-  color: #333;
-  transition: all 0.3s ease;
-}
-
-nav ul li a:hover {
-  color: #fff;
 }

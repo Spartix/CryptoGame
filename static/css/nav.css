@@ -1,0 +1,60 @@
+nav {
+  display: flex;
+  justify-content: center;
+  transform: translateX(-40%);
+  align-items: center;
+  border-bottom: 2px solid crimson;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+}
+
+nav ul li a {
+  font-size: 1.2rem;
+  font-weight: bolder;
+  text-decoration: none;
+  font-family: sans-serif;
+  color: #b9b9b9;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #fff;
+  box-shadow: 5px 5px 5px white;
+}
+
+
+.container {
+  margin-left: 10px;
+  width: 70px;
+  height: 25px;
+  position: relative;
+  background-color: azure;
+  border-radius: 25% / 50%;
+}
+
+
+#theme-toggle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: url("../img/FullMoon2010.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#theme-toggle.clicked {
+  transform: translateX(175%);
+}

@@ -10,9 +10,12 @@
     <div class="container">
       <h2>Login</h2>
       <form action="async-login" method="post">
-        <input type="text" name="username" placeholder="Username" required />
+        <input type="email" minlength="8" name="email" placeholder="E-mail" required />
         <input
           type="password"
+          minlength="8"
+          maxlength="14"
+          pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}"
           name="password"
           id="password"
           placeholder="Mot De Passe"
@@ -43,6 +46,12 @@
         }
       }
       isValid();
+      var input = document.getElementById('password')
+      input.oninvalid = function(event) {event.target.setCustomValidity(`Le mot de passe doit contenir: 
+                -Au moins une majuscule (A-Z)
+                -Au moins 8 caractère (maximum 14)
+                -des chiffres (0-9) 
+                -des caratères spéciaux (#?!@$%^&*-)`)}
     </script>
   </body>
 </html>
