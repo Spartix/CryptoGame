@@ -1,7 +1,7 @@
 nav {
   display: flex;
   justify-content: center;
-  transform: translateX(-40%);
+  /* transform: translateX(-40%); */
   align-items: center;
   border-bottom: 2px solid crimson;
 }
@@ -19,7 +19,7 @@ nav ul li a {
   font-weight: bolder;
   text-decoration: none;
   font-family: sans-serif;
-  color: #b9b9b9;
+  color: azure;
   transition: all 0.3s ease;
 }
 
@@ -28,8 +28,7 @@ nav ul li a:hover {
   box-shadow: 5px 5px 5px white;
 }
 
-
-.container {
+.container_switch {
   margin-left: 10px;
   width: 70px;
   height: 25px;
@@ -37,7 +36,6 @@ nav ul li a:hover {
   background-color: azure;
   border-radius: 25% / 50%;
 }
-
 
 #theme-toggle {
   width: 25px;

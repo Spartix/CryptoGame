@@ -14,7 +14,8 @@ body {
   padding: 20px;
   padding-bottom: 5%;
   background-color: #000000;
-  background-image: url("https://s2.qwant.com/thumbr/0x380/7/9/45110ed9e7c87af46fc65a45f743a474d53ce5ee0516d5a43c0b8d7f164027/fond-piece-or-bitcoin-crypto-monnaie_1017-31505.jpg?u=https%3A%2F%2Fimg.freepik.com%2Fvecteurs-libre%2Ffond-piece-or-bitcoin-crypto-monnaie_1017-31505.jpg&q=0&b=1&p=0&a=0");
+  /* background-image: url("https://s2.qwant.com/thumbr/0x380/7/9/45110ed9e7c87af46fc65a45f743a474d53ce5ee0516d5a43c0b8d7f164027/fond-piece-or-bitcoin-crypto-monnaie_1017-31505.jpg?u=https%3A%2F%2Fimg.freepik.com%2Fvecteurs-libre%2Ffond-piece-or-bitcoin-crypto-monnaie_1017-31505.jpg&q=0&b=1&p=0&a=0"); */
+  background-image: url("../img/profil.webp");
   border-radius: 8px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -70,4 +71,10 @@ input[type="text"]:focus {
 #actifSelect {
   color: 333;
   border-radius: 15px;
+}
+h1 {
+  color: azure;
+}
+.profile-info label {
+  color: azure;
 }

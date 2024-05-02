@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/send.css') }}"
+    />
+    <nav>
+      <ul>
+        <li><a href="./">Home</a></li>
+        <li><a href="./login">Se connecter</a></li>
+        <li><a href="./register">S'inscrire</a></li>
+        <div class="container_switch">
+          <button
+            id="theme-toggle"
+            onclick="toggleTheme()"
+            class="circle"
+            onclick="toggleTheme()"
+          ></button>
+        </div>
+      </ul>
+    </nav>
+  </head>
+  <body>
+    <div class="block">
+      <form action="./send-async">
+        <!-- Input field for user input -->
+        <input class="search" name="Pseudo" type="text" />
+
+        <!-- Button to trigger the value retrieval -->
+        <button
+          type="button"
+          class="search_button"
+          onclick="search(document.querySelector('.search').value)"
+        >
+          Search
+        </button>
+        <input
+          class="error"
+          disabled
+          hidden
+          value="ACCOUNT NOT FOUND"
+          style="color: red"
+        />
+        <input
+          class="found"
+          disabled
+          hidden
+          value="ACCOUNT FOUND"
+          style="color: blue"
+        />
+        <input class="selected" name="selected" disabled hidden />
+
+        <select name="actifs" id="actifSelect">
+          <option value="">--Selectionnez un actif--</option>
+          <option value="EUR">EUR</option>
+          <option value="BTC">BTC</option>
+          <option value="LTC">LTC</option>
+          <option value="SOL">SOL</option>
+        </select>
+        <input name="Montant" type="number" />
+        <button class="sub" type="submit">Envoyez</button>
+      </form>
+    </div>
+    <script>
+      function search(user) {
+        const url = `async-search`;
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify({ pseudo: encodeURIComponent(user) }),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json()) // Assuming the server responds with JSON
+          .then((data) => {
+            if (data["exist"]) {
+              console.log("Exist");
+              document.querySelector(".selected").value = user;
+              document.querySelector(".error").hidden = true;
+              document.querySelector(".found").hidden = false;
+              document.querySelector(".search_button").disabled = true;
+            } else {
+              console.log("doesnt exist");
+              document.querySelector(".error").hidden = false;
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>

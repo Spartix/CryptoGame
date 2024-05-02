@@ -4,6 +4,7 @@ from src.route.main import *
 from src.db import get_db
 from src.users import user
 from src.utility.crypto import get_crypto_data
+from src.money import Argent
 # conn = sqlite3.connect('DB_CryptoGame.db')
 
 
@@ -83,6 +84,13 @@ def GetChart():
 def GetRoue():
     return render_template("roue.html")
 
+@app.route("/send")
+def send():
+    return render_template("send.html")
+
+@app.route("/async-search",methods=["POST"])
+def Search():
+    return {"exist":Argent.Existe(request.get_json()["pseudo"],get_db().cursor())}
 # @app.route("/exemple")
 # def exemple():
 #     # Get_Inuput_User = request.form["utilisateur"]
