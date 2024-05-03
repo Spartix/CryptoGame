@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <style>
+      button.sender {
+  background-color: #4caf50; /* Couleur de fond pour le bouton */
+  color: white;
+  padding: 15px 20px;
+  margin-top: 20px; /* Espacement avant le bouton */
+  transition: background-color 0.2s ease; /* Transition douce pour le bouton */
+  border-radius: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button.sender:hover {
+  background-color: #369639; /* Changement de couleur au survol */
+}
+    </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Votre Profil</title>
@@ -48,13 +64,16 @@
           <option value="SOL">SOL</option>
         </select>
       </br>
+        
         <input disabled type="text" placeholder="BALANCE" />
       </div>
       <!-- <img
         src=""
         alt="Money Image"
       /> -->
+      <button class="sender" onclick="window.location.href = './send'">Send Money</button>
     </div>
+
     <script src="{{ url_for('static', filename='js/snow.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profil.js') }}"></script>
     <script src="{{ url_for('static', filename='js/switch.js') }}"></script>

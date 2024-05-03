@@ -23,9 +23,16 @@
   </head>
   <body>
     <div class="block">
-      <form action="./send-async">
+      <form action="./async-send" method="post">
+        <input class="all_error" disabled hidden value style="color: red" />
         <!-- Input field for user input -->
-        <input class="search" name="Pseudo" type="text" />
+        <input
+          required
+          class="search"
+          name="Pseudo"
+          type="text"
+          placeholder="Pseudo"
+        />
 
         <!-- Button to trigger the value retrieval -->
         <button
@@ -58,11 +65,45 @@
           <option value="LTC">LTC</option>
           <option value="SOL">SOL</option>
         </select>
-        <input name="Montant" type="number" />
-        <button class="sub" type="submit">Envoyez</button>
+        <input
+          required
+          placeholder="Montant à envoyer"
+          name="Montant"
+          type="number"
+        />
+        <input
+          class="receive"
+          disabled
+          hidden
+          value="AUCUN PSEUDO ENTRE"
+          style="color: red; background-color: white"
+        />
+        <button class="sub" onclick="subi(this.form)" type="button">
+          Envoyez
+        </button>
       </form>
     </div>
     <script>
+      if (document.location.href.includes("?error=true")) {
+        document.querySelector(".all_error").value = document.location.href
+          .split("message=")[1]
+          .split("&")[0];
+        document.querySelector(".all_error").hidden = false;
+      }
+      if (document.location.href.includes("?success=true")) {
+        document.querySelector(".all_error").value =
+          "Argent envoyé avec success !";
+        document.querySelector(".all_error").style.color = "blue";
+        document.querySelector(".all_error").hidden = false;
+      }
+      function subi(form) {
+        if (form.querySelector(".search").value) {
+          form.querySelector(".search").hidden = true;
+          form.submit();
+        } else {
+          form.querySelector(".receive").hidden = false;
+        }
+      }
       function search(user) {
         const url = `async-search`;
         fetch(url, {
@@ -76,11 +117,12 @@
           .then((response) => response.json()) // Assuming the server responds with JSON
           .then((data) => {
             if (data["exist"]) {
-              console.log("Exist");
+              // console.log("Exist");
               document.querySelector(".selected").value = user;
               document.querySelector(".error").hidden = true;
               document.querySelector(".found").hidden = false;
               document.querySelector(".search_button").disabled = true;
+              document.querySelector(".receive").hidden = true;
             } else {
               console.log("doesnt exist");
               document.querySelector(".error").hidden = false;

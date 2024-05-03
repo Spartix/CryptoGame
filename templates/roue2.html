@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <style>
+      body,
+      html {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        margin: 0; /* Assurez-vous qu'il n'y a pas de marge par défaut */
+        background-color: #161616;
+      }
+
+      .wheel-container {
+        display: flex;
+        flex-direction: column; /* Alignement vertical des enfants */
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .wheel {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background-color: #ffc107;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 5px solid #333;
+        position: relative;
+      }
+
+      #result {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        color: azure;
+      }
+
+      button {
+        margin-top: 20px; /* Espace entre le bouton et la roue */
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roue de la fortune</title>
+  </head>
+  <body>
+    <div class="wheel-container">
+      <div class="wheel">
+        <span id="result"></span>
+        <!-- Emplacement du résultat -->
+      </div>
+      <button onclick="spinWheel()">Faire tourner la roue</button>
+    </div>
+
+    <script>
+      function spinWheel() {
+        let intervalId;
+        let wheel = document.querySelector(".wheel");
+        let resultDisplay = document.getElementById("result");
+
+        // Effet de rotation
+        wheel.style.transition = "transform 4s ease-out";
+        wheel.style.transform =
+          "rotate(" + (3600 + Math.floor(Math.random() * 360)) + "deg)";
+
+        // Réinitialisation pour la prochaine rotation
+        intervalId = setInterval(() => {
+          resultDisplay.textContent = Math.floor(Math.random() * 360);
+        }, 10);
+        setTimeout(() => {
+          wheel.style.transition = "none";
+          wheel.style.transform = "rotate(0deg)";
+        }, 4000);
+
+        // Requête au serveur
+        fetch("/async-roue")
+          .then((response) => response.json())
+          .then((number) => {
+            setTimeout(() => {
+              clearInterval(intervalId);
+              resultDisplay.textContent = number["rez"]; // Affiche le chiffre retourné
+            }, 4000);
+          })
+          .catch((error) => console.error("Erreur:", error));
+      }
+    </script>
+  </body>
+</html>

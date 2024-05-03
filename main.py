@@ -82,15 +82,23 @@ def GetChart():
 
 @app.route('/roue')
 def GetRoue():
-    return render_template("roue.html")
+    return render_template("roue2.html")
 
 @app.route("/send")
 def send():
-    return render_template("send.html")
+    if not (user.IsLogin(request.cookies.get('access_token'),get_db().cursor())):
+        return redirect("/login")
+    else:
+        return render_template('send.html')
 
 @app.route("/async-search",methods=["POST"])
 def Search():
     return {"exist":Argent.Existe(request.get_json()["pseudo"],get_db().cursor())}
+
+@app.route("/async-send",methods=["POST"])
+def Send():
+    print()
+    return Argent.Envoyer(request.cookies.get("access_token"),request.form["Pseudo"],request.form["actifs"],conn=get_db(),montant=request.form["Montant"])
 # @app.route("/exemple")
 # def exemple():
 #     # Get_Inuput_User = request.form["utilisateur"]
@@ -98,7 +106,8 @@ def Search():
 #     conn.commit()
 #     print(reponsse_sql)
 #     return str(reponsse_sql)
-
-
+@app.route("/async-roue")
+def Roue():
+    return {"rez":25}
 if __name__ == '__main__':
     app.run(debug=True,port=3000,host='0.0.0.0')

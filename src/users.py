@@ -67,10 +67,10 @@ class user:
 
 
     
-    def GetId(type,value,cursor):
+    def GetId(type,value,cursor:sqlite3.Cursor):
         cursor.execute(f"SELECT * FROM users WHERE {type} = ?", (value,))
-        response = cursor.fetchall()
-        return response
+        response = cursor.fetchone()
+        return response[0]
 
     # Secret key for encoding and decoding JWT tokens
     

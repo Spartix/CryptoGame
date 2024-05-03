@@ -1,12 +1,15 @@
 import sqlite3
 
+from flask import redirect, render_template
+from src.users import user
+
 class Argent:
-    def peux_payer(token,argent,types,pseudo,cursor) -> bool:
+    def peux_payer(token,argent,types,cursor) -> bool:
         # avec son token savoir si il a assez d'argent ( PeutPayer(token,argent) -> Bool )
         resultat = cursor.execute(f"select BTC,LTC,SOL from Argent JOIN Users on Argent.ID_User = Users.ID_User where Users.Token = ?",(token,))   
         rez = resultat.fetchone()
         d = {"BTC":rez[0],"LTC":rez[1],"SOL":rez[2]}
-        if argent <= d[types]:
+        if float(argent) <= d[types]:
             return True
         else:
             return False
@@ -20,33 +23,40 @@ class Argent:
         user = res.fetchone()
         if user:
             d ={"id":user[0]}
-            return True and d["id"]
+            return (True , d["id"])
         else:
-            return False
+            return (False)
         
     # exemple : Existe("Akabinks") / Existe("Aka")
         
     def Rajouter_Argent(receveur_id,types,montant,conn:sqlite3.Connection):
         cursor = conn.cursor()
         # rajouter de l'argent a qqun ( Rajouter_Argent(receveur_id , type, montant) -> None)
-        cursor.execute("UPDATE Argent SET {types} = ? WHERE id_User = ?", (montant, receveur_id))
+        cursor.execute(f"UPDATE Argent SET {types} = ? WHERE id_User = ?", (montant, receveur_id))
         conn.commit()
  
-    def Retire_argent(pseudo,types,montant,conn:sqlite3.Connection):
+    def Retire_argent(token,types,montant,conn:sqlite3.Connection):
         cursor = conn.cursor()
-        cursor.execute(f"UPDATE Argent SET {types} = (SELECT {types} FROM Argent JOIN Users ON Argent.ID_User = Users.ID_User WHERE Users.Username = '{pseudo}') - {montant} WHERE ID_User IN (SELECT ID_User FROM Users WHERE Username ='{pseudo}')")
+        cursor.execute(f"UPDATE Argent SET {types} = (SELECT {types} FROM Argent JOIN Users ON Argent.ID_User = Users.ID_User WHERE Users.Token = ?) - {montant} WHERE ID_User = (SELECT ID_User FROM Users WHERE Token = ?)",(token,token))
         conn.commit()
         
     #exemple : Retire_argent('Akabinks','BTC',7)
         
-    def Envoyer(pseudo,token,receveur_username,types,montant,receveur_id,conn:sqlite3.Connection):
+    def Envoyer(token,receveur_username,types,montant,conn:sqlite3.Connection):
 
         # Envoyer a qqqun ( Envoyer(token,receveur_username,types,motant) -> None)
-        if Argent.peux_payer(pseudo,token,montant,types,conn.cursor()):
-            if Argent.Existe(receveur_username,conn.cursor()):
+        if Argent.peux_payer(token,montant,types,conn.cursor()):
+            existe = Argent.Existe(receveur_username,conn.cursor())
+            if existe[0]:
+                receveur_id = existe[1]
                 Argent.Rajouter_Argent(receveur_id,types,montant,conn)
-                Argent.Retire_argent(pseudo,types,montant,conn)
-        conn.commit()
+                Argent.Retire_argent(token,types,montant,conn)
+                conn.commit()
+                return redirect('/send?success=true')
+            else:
+                return render_template('send.html')
+        else:
+            return redirect('/send?error=true&message=Pas_Assez_Argent')
    
 
 
