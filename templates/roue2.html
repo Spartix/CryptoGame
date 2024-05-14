@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <style>
+      /* rajouter + de style pour le boutton etc */
       body,
       html {
         height: 100%;
@@ -10,13 +11,13 @@
         justify-content: center;
         align-items: center;
         font-family: Arial, sans-serif;
-        margin: 0; /* Assurez-vous qu'il n'y a pas de marge par défaut */
+        margin: 0;
         background-color: #161616;
       }
 
       .wheel-container {
         display: flex;
-        flex-direction: column; /* Alignement vertical des enfants */
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100%;
@@ -44,7 +45,7 @@
       }
 
       button {
-        margin-top: 20px; /* Espace entre le bouton et la roue */
+        margin-top: 20px;
       }
     </style>
     <meta charset="UTF-8" />
@@ -55,13 +56,19 @@
     <div class="wheel-container">
       <div class="wheel">
         <span id="result"></span>
-        <!-- Emplacement du résultat -->
+        <!-- Emplacement rez -->
       </div>
+      <input value="0" />
       <button onclick="spinWheel()">Faire tourner la roue</button>
     </div>
 
     <script>
+      var log = document.cookie.split("access_token=")[1].split("&")[0];
+      //il faut fetch les infos peut spin etc puis modifier html une fois fais
       function spinWheel() {
+        document.querySelectorAll("button").forEach((elt) => {
+          elt.disabled = true;
+        });
         let intervalId;
         let wheel = document.querySelector(".wheel");
         let resultDisplay = document.getElementById("result");
